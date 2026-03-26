@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block title %}
+Sign Up Page
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1> Sign Up </h1>
+    <form action="{{ url_for('signup') }}" method="post">
+        {% if message is defined and message %}
+            <div style="color: red;">  <strong>  {{ message }} ???? </strong></div>
+        {% endif %}
+        <br>
+        <label>Name:</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" name="name">
+        
+        <br>
+        <label>Email:</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" name="email">
+        
+        <br>
+        <label class="gf">Password:</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" name="pswd">
+
+        <br>
+        <button type="submit" class="btn btn-primary">Register</button>
+        <p class="bottom">Already have an account?  <a class="bottom" href="{{url_for('login')}}"> Login here</a></p>
+    </form>
+</div>  
+{% endblock %}
