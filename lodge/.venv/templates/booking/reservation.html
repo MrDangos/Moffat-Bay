@@ -3,31 +3,35 @@
 Reservation Page
 {% endblock %}
 {% block content %}
-    <h1> Book Your Vication </h1>
-    <form action="/reserve" method="post">
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name"><br>
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email"><br>
-        <label for="numGuests">Number of Guests:</label><br>
-        <input type="number" id="numGuests" name="numGuests"><br>
-        <label for="room">Room Size:</label><br>
-        <select id="room" name="room">
-            <option value="DFBed">Double Full Bed -  $120 per night</option>
-            <option value="queen">Queen - $135 per night</option>
-            <option value="DQBed">Double Queen Bed - $150 per night</option>
-            <option value="king">King - $160 per night</option>
-        </select><br>
-        <label for="checkin">Check-in Date:</label><br>
-        <input type="date" id="checkin" name="checkin"><br>
-        <label for="checkout">Check-out Date:</label><br>
-        <input type="date" id="checkout" name="checkout"><br><br>
+    <h1> Book Your Vacation </h1>
+    <form action="/reservation/" method="post">
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name"><br>
+
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email"><br>
+
+            <label for="numGuests">Number of Guests:</label><br>
+            <input type="number" id="numGuests" name="numGuests"><br>
+
+            <label for="room">Room Size:</label><br>
+                <select id="room" name="room">
+                    <option value="DFBed">Double Full Bed -  $120 per night</option>
+                    <option value="queen">Queen - $135 per night</option>
+                    <option value="DQBed">Double Queen Bed - $150 per night</option>
+                    <option value="king">King - $160 per night</option>
+                </select><br> 
+                
+            <label for="checkin">Check-in Date:</label><br>
+            <input type="date" id="checkin" name="checkin"><br>
+
+            <label for="checkout">Check-out Date:</label><br>
+            <input type="date" id="checkout" name="checkout"><br><br>
+
+        {% if session.name %}    
+                <input type="submit" value="Review Reservation">
+        {% else %}
+            To make a reservation, please <a href="/login">login</a>.
+        {% endif %}
     </form>
-    {% if session.name %}    
-        <form>
-            <input type="submit" value="Reserve">
-        </form>
-    {% else %}
-        To make a reservation, please <a href="/login">login</a>.
-    {% endif %}
 {% endblock %}

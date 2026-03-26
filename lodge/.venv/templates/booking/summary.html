@@ -1,7 +1,17 @@
 {% extends "layout.html" %}
-{% block title %}
-Reservation Page
-{% endblock %}
+{% block title %}Reservation Summary{% endblock %}
 {% block content %}
-    <h1> Reservation Receipt </h1>
+    <h1>Reservation Summary</h1>
+
+    <p><strong>Name:</strong> {{ reservation.name }}</p>
+    <p><strong>Email:</strong> {{ reservation.email }}</p>
+    <p><strong>Room:</strong> {{ reservation.room_name }}</p>
+    <p><strong>Guests:</strong> {{ reservation.numGuests }}</p>
+    <p><strong>Check-in:</strong> {{ reservation.checkin }}</p>
+    <p><strong>Check-out:</strong> {{ reservation.checkout }}</p>
+    <p><strong>Total Price:</strong> ${{ reservation.total_price }}</p>
+    <form action="/confirm/" method="post">
+        <input type="submit" value="Confirm Reservation">
+    </form>
+    <a href="/reservation/">Cancel</a>
 {% endblock %}

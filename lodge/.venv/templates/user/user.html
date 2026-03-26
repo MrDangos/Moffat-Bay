@@ -1,26 +1,32 @@
 {% extends "layout.html" %}
-{% block title %}
-User Page
-{% endblock %}
+{% block title %}My Account{% endblock %}
 {% block content %}
-<style>
-.gfg{
-    font-size: 25px;
-    color: red;
-    font-style: italic;
-}
-</style>
-<div class="container">
-    <div class="row">    
-        <h2>User Profile</h2>
-    </div>
-    <br>
-    <div class="row">    
-        Logged in : <strong class="gfg">  {{ session['name'] }} </strong>| <a href="{{ url_for('logout') }}"> Logout</a>
-    </div>
-    <br><br>
-    <div class="row">
-        <h2>Welcome to the User profile page...</h2> 
-    </div>        
-</div>
+    <h1>Welcome, {{ name }}</h1>
+
+    <h2>Your Reservations</h2>
+
+    {% if reservations %}
+        <table>
+            <tr>
+                <th>Reservation ID</th>
+                <th>Room</th>
+                <th>Guests</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Total Cost</th>
+            </tr>
+            {% for r in reservations %}
+            <tr>
+                <td>{{ r.reservationid }}</td>
+                <td>{{ r.room_type }}</td>
+                <td>{{ r.num_guests }}</td>
+                <td>{{ r.checkin }}</td>
+                <td>{{ r.checkout }}</td>
+                <td>${{ r.total_cost }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>You have no reservations yet. <a href="/reservation/">Book one now!</a></p>
+    {% endif %}
 {% endblock %}
