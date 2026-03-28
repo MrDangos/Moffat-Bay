@@ -136,7 +136,7 @@ def login():
             session['name'] = user['name']
             session['email'] = user['email']
             message = 'Logged in successfully !'
-            return render_template('user/user.html', message=message)
+            return redirect(url_for('user'))
         else:
             message = 'Please enter correct email / password !'
     return render_template('user/login.html', message=message)

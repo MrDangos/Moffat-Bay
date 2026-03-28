@@ -29,4 +29,5 @@
     {% else %}
         <p>You have no reservations yet. <a href="/reservation/">Book one now!</a></p>
     {% endif %}
+    <a href="{{ url_for('logout') }}">Logout</a>
 {% endblock %}
