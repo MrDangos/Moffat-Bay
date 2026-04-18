@@ -19,20 +19,6 @@ Session(app)
 
 mysql = MySQL(app)
 
-ROOM_PRICES = {
-    'DFBed': 120,
-    'queen': 135,
-    'DQBed': 150,
-    'king': 160
-}
-
-ROOM_NAMES = {
-    'DFBed': 'Double Full Bed',
-    'queen': 'Queen',
-    'DQBed': 'Double Queen Bed',
-    'king': 'King'
-}
-
 
 def create_table():
     cursor = mysql.connection.cursor()
@@ -64,6 +50,7 @@ def create_table():
     mysql.connection.commit()
     cursor.close()
 
+
 with app.app_context():
     create_table()
     
@@ -86,28 +73,38 @@ def attractions():
 # resrevation page, get user input and save it in session, then redirect to summary page
 @app.route("/reservation/", methods=["GET", "POST"])
 def reservation():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    
     if request.method == 'POST':
-        room = request.form['room']
+        roomid = request.form['roomid']
         checkin = request.form['checkin']
         checkout = request.form['checkout']
+
+        # get room details from DB instead of the dictionary
+        cursor.execute("SELECT * FROM rooms WHERE roomid = %s", (roomid,))
+        room = cursor.fetchone()
 
         checkin_date = datetime.strptime(checkin, "%Y-%m-%d")
         checkout_date = datetime.strptime(checkout, "%Y-%m-%d")
         nights = (checkout_date - checkin_date).days
 
         session['pending_reservation'] = {
-            'name': request.form['name'],
-            'email': request.form['email'],
-            'numGuests': request.form['numGuests'],
-            'room': room,
-            'room_name': ROOM_NAMES[room],
+            'roomid': roomid,
+            'room_name': room['room_name'],
+            'nightly_rate': float(room['nightly_rate']),
+            'num_guests': request.form['numGuests'],
             'checkin': checkin,
             'checkout': checkout,
             'nights': nights,
-            'total_cost': nights * ROOM_PRICES[room]
+            'total_cost': nights * float(room['nightly_rate'])
         }
         return redirect(url_for('summary'))
-    return render_template("booking/reservation.html") 
+
+    # pass rooms to the template so the dropdown is built from the DB
+    cursor.execute("SELECT * FROM rooms")
+    rooms = cursor.fetchall()
+    cursor.close()
+    return render_template("booking/reservation.html", rooms=rooms)
 
 #summary page, displays reservation deatils
 @app.route("/reservation/summary", methods=["GET"])
@@ -186,31 +183,37 @@ def user():
     
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute("""
-        SELECT * FROM reservations 
-        WHERE userid = %s
+        SELECT 
+            r.reservationid,
+            r.num_guests,
+            r.checkin,
+            r.checkout,
+            ro.room_name,
+            ro.nightly_rate,
+            DATEDIFF(r.checkout, r.checkin) AS nights,
+            DATEDIFF(r.checkout, r.checkin) * ro.nightly_rate  AS total_cost
+        FROM reservations r
+        JOIN rooms ro ON r.roomid = ro.roomid
+        WHERE r.userid = %s
     """, (session['userid'],))
     reservations = cursor.fetchall()
     cursor.close()
     
     return render_template('user/user.html', name=session['name'], reservations=reservations)
-
 # confirm reservation and save it to sql db so user can see it on account page
 @app.route("/confirm/", methods=["POST"])
 def confirm():
     if not session.get("name"):
         return redirect("/login")
-    
     r = session.get('pending_reservation')
     if not r:
         return redirect(url_for('reservation'))
 
     cursor = mysql.connection.cursor()
     cursor.execute("""
-        INSERT INTO reservations 
-        (userid, name, email, num_guests, room_type, checkin, checkout, total_cost)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-    """, (session['userid'], r['name'], r['email'], r['numGuests'],
-          r['room'], r['checkin'], r['checkout'], r['total_cost']))
+        INSERT INTO reservations (userid, roomid, num_guests, checkin, checkout)
+        VALUES (%s, %s, %s, %s, %s)
+    """, (session['userid'], r['roomid'], r['num_guests'], r['checkin'], r['checkout']))
     mysql.connection.commit()
     cursor.close()
 

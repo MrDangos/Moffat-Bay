@@ -13,15 +13,17 @@
                 <th>Guests</th>
                 <th>Check-in</th>
                 <th>Check-out</th>
+                <th>Nights</th>
                 <th>Total Cost</th>
             </tr>
             {% for r in reservations %}
             <tr>
                 <td>{{ r.reservationid }}</td>
-                <td>{{ r.room_type }}</td>
+                <td>{{ r.room_name }}</td>
                 <td>{{ r.num_guests }}</td>
                 <td>{{ r.checkin }}</td>
                 <td>{{ r.checkout }}</td>
+                <td>{{ r.nights }}</td>
                 <td>${{ r.total_cost }}</td>
             </tr>
             {% endfor %}
