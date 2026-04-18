@@ -15,7 +15,7 @@
 
 ## Running the Project
 
-The project will run as-is. On first launch, Flask will automatically create the required database schema and tables in MySQL.
+The project will run as-is. On first launch, Flask will automatically create the required database schema and tables in MySQL and seed the rooms table with the four room types and pricing.
 
 **Default MySQL settings:**
 | Setting | Value |
@@ -30,30 +30,42 @@ The project will run as-is. On first launch, Flask will automatically create the
 
 ## Manual Database Setup
 
-If Flask fails to create the tables on first run, execute the following code in MySQL Workbench or your MySQL terminal to create the tables:
+If Flask fails to create the tables on first run, execute the following in MySQL Workbench or your MySQL terminal:
+
 ```sql
 CREATE DATABASE IF NOT EXISTS user_table;
 USE user_table;
 
 CREATE TABLE IF NOT EXISTS user (
-    userid INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
+    userid   INT          AUTO_INCREMENT PRIMARY KEY,
+    name     VARCHAR(100) NOT NULL,
+    email    VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS rooms (
+    roomid       INT           AUTO_INCREMENT PRIMARY KEY,
+    room_type    VARCHAR(20)   NOT NULL,
+    room_name    VARCHAR(50)   NOT NULL,
+    nightly_rate DECIMAL(10,2) NOT NULL
+);
+
+INSERT INTO rooms (room_type, room_name, nightly_rate) VALUES
+('DFBed', 'Double Full Bed',  120.00),
+('queen', 'Queen',            135.00),
+('DQBed', 'Double Queen Bed', 150.00),
+('king',  'King',             160.00);
+
 CREATE TABLE IF NOT EXISTS reservations (
-    reservationid INT AUTO_INCREMENT PRIMARY KEY,
-    userid INT NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    num_guests INT NOT NULL,
-    room_type VARCHAR(20) NOT NULL,
-    checkin DATE NOT NULL,
-    checkout DATE NOT NULL,
-    total_cost DECIMAL(10,2) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (userid) REFERENCES user(userid)
+    reservationid INT       AUTO_INCREMENT PRIMARY KEY,
+    userid        INT       NOT NULL,
+    roomid        INT       NOT NULL,
+    num_guests    INT       NOT NULL,
+    checkin       DATE      NOT NULL,
+    checkout      DATE      NOT NULL,
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userid) REFERENCES user(userid),
+    FOREIGN KEY (roomid) REFERENCES rooms(roomid)
 );
 ```
 
