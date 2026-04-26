@@ -22,31 +22,50 @@ mysql = MySQL(app)
 
 def create_table():
     cursor = mysql.connection.cursor()
-    # user table
+
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS user (
-            userid INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(100) NOT NULL,
-            email VARCHAR(100) NOT NULL UNIQUE,
+            userid   INT          AUTO_INCREMENT PRIMARY KEY,
+            name     VARCHAR(100) NOT NULL,
+            email    VARCHAR(100) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL
         )
     """)
-    # reservations table
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS rooms (
+            roomid       INT          AUTO_INCREMENT PRIMARY KEY,
+            room_type    VARCHAR(20)  NOT NULL,
+            room_name    VARCHAR(50)  NOT NULL,
+            nightly_rate DECIMAL(10,2) NOT NULL
+        )
+    """)
+
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS reservations (
             reservationid INT AUTO_INCREMENT PRIMARY KEY,
-            userid INT NOT NULL,
-            name VARCHAR(100) NOT NULL,
-            email VARCHAR(100) NOT NULL,
-            num_guests INT NOT NULL,
-            room_type VARCHAR(20) NOT NULL,
-            checkin DATE NOT NULL,
-            checkout DATE NOT NULL,
-            total_cost DECIMAL(10,2) NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (userid) REFERENCES user(userid)
+            userid        INT NOT NULL,
+            roomid        INT NOT NULL,
+            num_guests    INT NOT NULL,
+            checkin       DATE NOT NULL,
+            checkout      DATE NOT NULL,
+            created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (userid) REFERENCES user(userid),
+            FOREIGN KEY (roomid) REFERENCES rooms(roomid)
         )
     """)
+
+    # seed rooms only if the table is empty
+    cursor.execute("SELECT COUNT(*) FROM rooms")
+    if cursor.fetchone()[0] == 0:
+        cursor.execute("""
+            INSERT INTO rooms (room_type, room_name, nightly_rate) VALUES
+            ('DFBed', 'Double Full Bed',  120.00),
+            ('queen', 'Queen',            135.00),
+            ('DQBed', 'Double Queen Bed', 150.00),
+            ('king',  'King',             160.00)
+        """)
+
     mysql.connection.commit()
     cursor.close()
 
@@ -79,20 +98,38 @@ def reservation():
         roomid = request.form['roomid']
         checkin = request.form['checkin']
         checkout = request.form['checkout']
+        num_guests = request.form['numGuests']
+        today = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
 
-        # get room details from DB instead of the dictionary
-        cursor.execute("SELECT * FROM rooms WHERE roomid = %s", (roomid,))
-        room = cursor.fetchone()
+        cursor.execute("SELECT * FROM rooms")
+        rooms = cursor.fetchall()
+        today_str = today.strftime("%Y-%m-%d")
+
+        # check for empty fields first before trying to parse dates
+        if not checkin or not checkout or not num_guests:
+            error = "Please fill out all fields."
+            return render_template("booking/reservation.html", rooms=rooms, error=error, today=today_str)
 
         checkin_date = datetime.strptime(checkin, "%Y-%m-%d")
         checkout_date = datetime.strptime(checkout, "%Y-%m-%d")
+        
+        if checkin_date < today:
+            error = "Check-in date cannot be in the past."
+            return render_template("booking/reservation.html", rooms=rooms, error=error, today=today_str)
+
+        if checkout_date <= checkin_date:
+            error = "Check-out date must be after check-in date."
+            return render_template("booking/reservation.html", rooms=rooms, error=error, today=today_str)
+
+        cursor.execute("SELECT * FROM rooms WHERE roomid = %s", (roomid,))
+        room = cursor.fetchone()
         nights = (checkout_date - checkin_date).days
 
         session['pending_reservation'] = {
             'roomid': roomid,
             'room_name': room['room_name'],
             'nightly_rate': float(room['nightly_rate']),
-            'num_guests': request.form['numGuests'],
+            'num_guests': num_guests,
             'checkin': checkin,
             'checkout': checkout,
             'nights': nights,
@@ -100,11 +137,11 @@ def reservation():
         }
         return redirect(url_for('summary'))
 
-    # pass rooms to the template so the dropdown is built from the DB
+    today = datetime.today().strftime("%Y-%m-%d")
     cursor.execute("SELECT * FROM rooms")
     rooms = cursor.fetchall()
     cursor.close()
-    return render_template("booking/reservation.html", rooms=rooms)
+    return render_template("booking/reservation.html", rooms=rooms, today=today)
 
 #summary page, displays reservation deatils
 @app.route("/reservation/summary", methods=["GET"])

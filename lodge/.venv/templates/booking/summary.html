@@ -3,12 +3,12 @@
 {% block content %}
     <h1>Reservation Summary</h1>
 
-    <p><strong>Name:</strong> {{ reservation.name }}</p>
-    <p><strong>Email:</strong> {{ reservation.email }}</p>
-    <p><strong>Guests:</strong> {{ reservation.numGuests }}</p>
+    <p><strong>Guests:</strong> {{ reservation.num_guests }}</p>
     <p><strong>Room:</strong> {{ reservation.room_name }}</p>
     <p><strong>Rate:</strong> ${{ reservation.nightly_rate }}/night</p>
     <p><strong>Nights:</strong> {{ reservation.nights }}</p>
+    <p><strong>Check-in:</strong> {{ reservation.checkin }}</p>
+    <p><strong>Check-out:</strong> {{ reservation.checkout }}</p>
     <p><strong>Total Cost:</strong> ${{ reservation.total_cost }}</p>
     <form action="/confirm/" method="post">
         <input type="submit" value="Confirm Reservation">
