@@ -4,12 +4,15 @@ Reservation Page
 {% endblock %}
 {% block content %}
     <h1> Book Your Vacation </h1>
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
     <form action="/reservation/" method="post">
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name"><br>
+
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email"><br>
+
             <label for="numGuests">Number of Guests:</label><br>
-            <input type="number" min="1" max="20" id="numGuests" name="numGuests"><br>
+            <input type="number" id="numGuests" name="numGuests"><br>
 
             <label for="roomid">Room Size:</label><br>
             <select id="roomid" name="roomid">
@@ -21,10 +24,10 @@ Reservation Page
             </select><br>
                 
             <label for="checkin">Check-in Date:</label><br>
-            <input type="date" id="checkin" name="checkin" min="{{ today }}"><br>
+            <input type="date" id="checkin" name="checkin"><br>
 
             <label for="checkout">Check-out Date:</label><br>
-            <input type="date" id="checkout" name="checkout" min="{{ today }}"><br>
+            <input type="date" id="checkout" name="checkout"><br><br>
 
         {% if session.name %}    
                 <input type="submit" value="Review Reservation">
