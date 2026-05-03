@@ -8,23 +8,27 @@ Reservation Page
         <p style="color: red;">{{ error }}</p>
     {% endif %}
     <form action="/reservation/" method="post">
-            <label for="numGuests">Number of Guests:</label><br>
-            <input type="number" min="1" max="20" id="numGuests" name="numGuests"><br>
+        <label for="numGuests">Number of Guests:</label><br>
+        <input type="number" id="numGuests" name="numGuests" 
+            value="{{ pending.num_guests if pending else '' }}" min="1" max="20"><br>
 
-            <label for="roomid">Room Size:</label><br>
-            <select id="roomid" name="roomid">
-                {% for room in rooms %}
-                    <option value="{{ room.roomid }}">
-                        {{ room.room_name }} - ${{ room.nightly_rate }}/night
-                    </option>
-                {% endfor %}
-            </select><br>
-                
-            <label for="checkin">Check-in Date:</label><br>
-            <input type="date" id="checkin" name="checkin" min="{{ today }}"><br>
+        <label for="roomid">Select Room:</label><br>
+        <select id="roomid" name="roomid">
+            {% for room in rooms %}
+                <option value="{{ room.roomid }}"
+                    {% if pending and pending.roomid == room.roomid|string %}selected{% endif %}>
+                    {{ room.room_name }} - ${{ room.nightly_rate }}/night
+                </option>
+            {% endfor %}
+        </select><br>
 
-            <label for="checkout">Check-out Date:</label><br>
-            <input type="date" id="checkout" name="checkout" min="{{ today }}"><br>
+        <label for="checkin">Check-in Date:</label><br>
+        <input type="date" id="checkin" name="checkin" min="{{ today }}"
+            value="{{ pending.checkin if pending else '' }}"><br>
+
+        <label for="checkout">Check-out Date:</label><br>
+        <input type="date" id="checkout" name="checkout" min="{{ today }}"
+            value="{{ pending.checkout if pending else '' }}"><br>
 
         {% if session.name %}    
                 <input type="submit" value="Review Reservation">

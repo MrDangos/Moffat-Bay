@@ -10,8 +10,10 @@
     <p><strong>Check-in:</strong> {{ reservation.checkin }}</p>
     <p><strong>Check-out:</strong> {{ reservation.checkout }}</p>
     <p><strong>Total Cost:</strong> ${{ reservation.total_cost }}</p>
+
     <form action="/confirm/" method="post">
         <input type="submit" value="Confirm Reservation">
     </form>
+    <a href="/reservation/edit">Edit Reservation</a> |
     <a href="/reservation/">Cancel</a>
 {% endblock %}

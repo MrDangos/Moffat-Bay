@@ -151,6 +151,23 @@ def summary():
         return redirect(url_for('reservation'))
     return render_template('booking/summary.html', reservation=reservation)
 
+#allows user edit reservation details before confirming
+@app.route("/reservation/edit")
+def edit_reservation():
+    if not session.get("name"):
+        return redirect("/login")
+    pending = session.get('pending_reservation')
+    if not pending:
+        return redirect(url_for('reservation'))
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM rooms")
+    rooms = cursor.fetchall()
+    cursor.close()
+
+    today = datetime.today().strftime("%Y-%m-%d")
+    return render_template("booking/reservation.html", rooms=rooms, today=today, pending=pending)
+
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     message = ''
@@ -256,6 +273,7 @@ def confirm():
 
     session.pop('pending_reservation', None)
     return redirect(url_for('user'))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
