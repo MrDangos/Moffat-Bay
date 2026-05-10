@@ -201,7 +201,7 @@ def logout():
     session.pop('email', None)
     return redirect(url_for('login'))
 
-
+# Singup page 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     message = ''
@@ -254,6 +254,66 @@ def user():
     cursor.close()
     
     return render_template('user/user.html', name=session['name'], reservations=reservations)
+
+# cancel reservation
+@app.route('/cancel/<int:reservation_id>', methods=['GET', 'POST'])
+def cancel_reservation(reservation_id):
+    if not session.get("name"):
+        return redirect("/login")
+    
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("""
+        SELECT r.reservationid, ro.room_name, r.checkin, r.checkout
+        FROM reservations r
+        JOIN rooms ro ON r.roomid = ro.roomid
+        WHERE r.reservationid = %s AND r.userid = %s
+    """, (reservation_id, session['userid']))
+    reservation = cursor.fetchone()
+    cursor.close()
+
+    if not reservation:
+        return redirect(url_for('user'))
+
+    if request.method == 'POST':
+        cursor = mysql.connection.cursor()
+        cursor.execute("DELETE FROM reservations WHERE reservationid = %s", (reservation_id,))
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('user'))
+
+    return render_template('booking/cancel.html', reservation_id=reservation_id)
+
+# live search
+@app.route('/search_reservations', methods=['POST', 'GET'])
+def search_reservations():
+    if not session.get("name"):
+        return redirect("/login")
+
+    reservation_id = request.form['reservation_id']
+    user_id = session.get("userid")
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    query = """
+        SELECT 
+            r.reservationid,
+            r.num_guests,
+            r.checkin,
+            r.checkout,
+            ro.room_name,
+            ro.nightly_rate,
+            DATEDIFF(r.checkout, r.checkin) AS nights,
+            DATEDIFF(r.checkout, r.checkin) * ro.nightly_rate AS total_cost
+        FROM reservations r
+        JOIN rooms ro ON r.roomid = ro.roomid
+        WHERE r.userid = %s
+        AND CAST(r.reservationid AS CHAR) LIKE %s
+    """
+    cursor.execute(query, (user_id, f'%{reservation_id}%'))
+    result = cursor.fetchall()
+    cursor.close()
+
+    return jsonify(result)
+
 # confirm reservation and save it to sql db so user can see it on account page
 @app.route("/confirm/", methods=["POST"])
 def confirm():
