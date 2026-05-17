@@ -23,6 +23,12 @@ font-size: 18px;
 transition: 0.6s ease;
 border-radius: 0 3px 3px 0;
 user-select: none;
+background-color: rgba(185, 185, 185, 0.4);
+}
+
+.prev {
+  left: 0; 
+  border-radius: 0 3px 3px 0;
 }
 
 .next {
@@ -31,7 +37,7 @@ border-radius: 3px 0 0 3px;
 }
 
 .prev:hover, .next:hover {
-background-color: rgba(0,0,0,0.8);
+background-color: rgba(255, 255, 255, 0.8);
 }
 
 .text {

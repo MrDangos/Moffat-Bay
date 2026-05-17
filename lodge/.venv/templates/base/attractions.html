@@ -1,8 +1,135 @@
 {% extends "layout.html" %}
-{% block title %}
-Atttractions page
-{% endblock %}
+{% block title %}Attractions{% endblock %}
 {% block content %}
-<h1>Attractions</h1>
-<p>Here are some of the attractions near our lodge:</p>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='slide-show.css') }}">
+    <style>
+
+
+        .container {
+            max-width: 900px;
+            padding: 20px;
+            margin: 20px auto; 
+        }
+
+        img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            margin-bottom: 16px;
+        }
+    </style>
+<div class="mainintro">
+  <div class="intro-text">
+    <h2>Island Attractions</h2>
+    <p>Moffat Bay has something for everyone. From peaceful hikes to underwater adventures, the island is full of ways to make your stay unforgettable.</p>
+  </div>
+</div>
+
+<div class="features">
+  <h3>Things To Do</h3>
+  <div class="feature-boxes">
+
+    <div class="feature">
+        <h4>Hiking</h4>
+        <div id="hiking-slideshow"></div>
+        <p>Explore scenic trails through forests and coastal cliffs</p>
+    </div>
+
+    <div class="feature">
+        <h4>Kayaking</h4>
+        <div id="kayaking-slideshow"></div>
+        <p>Paddle through calm waters and hidden sea caves along the shoreline. Rentals and guided tours available for all skill levels.</p>
+    </div>
+
+    <div class="feature">
+        <h4>Wildlife Watching</h4>
+        <div id="wildlife-slideshow"></div>
+        <p>Join a guided boat tour to see humpback and orca whales up close. Tours depart daily from the marina and run about three hours.</p>
+    </div>
+
+    <div class="feature">
+        <h4>Scuba and Snorkeling</h4>
+        <div id="diving-slideshow"></div>
+        <p>Discover kelp forests and marine life beneath the surface. Certified guides lead dives for both beginners and experienced divers.</p>
+    </div>
+
+  </div>
+</div>
+
+<div class="cta">
+  <h3>Ready to explore?</h3>
+  <p>Book your stay and experience everything Moffat Bay has to offer.</p>
+  <a href="/reservation/" class="btn">Book Your Stay</a>
+</div>
+
+
+<script>
+  function createSlideshow(images) {
+    const slides = images.map((src, i) => `
+      <div class="mySlides fade">
+        <div class="numbertext">${i + 1} / ${images.length}</div>
+        <img src="${src}" style="width:100%">
+      </div>
+    `).join('');
+
+    return `
+      <div class="slideshow-container">
+        ${slides}
+        <a class="prev" onclick="plusSlides(this, -1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(this, 1)">&#10095;</a>
+      </div>
+    `;
+  }
+</script>
+
+<script>
+  const slideshows = {
+    'hiking-slideshow': [
+      'https://images.squarespace-cdn.com/content/v1/67cca95248ea900978d53df0/bc401c78-460e-4897-8af5-b2f2925273db/Shoreline.jpg?format=1000w',
+      'https://images.squarespace-cdn.com/content/v1/67cca95248ea900978d53df0/0c798062-3f84-4913-a385-2274471619d0/LimeKiln.jpg?format=1000w',
+      'https://images.squarespace-cdn.com/content/v1/67cca95248ea900978d53df0/ecefe2d1-064e-4c7f-a4e7-c3de9e9abc40/Lighthouse.jpg?format=1000w',
+    ],
+    'kayaking-slideshow': [
+      'https://i0.wp.com/madelinemarquardt.com/wp-content/uploads/2022/08/kayak-camp-beautiful-stuart-island-in-the-san-juan-islands-scaled.jpg?resize=768%2C1024&ssl=1',
+      'https://i0.wp.com/madelinemarquardt.com/wp-content/uploads/2022/07/sea-kayak-the-san-juan-islands-5-e1659383564319.jpg?w=1976&ssl=1',
+    ],
+    'wildlife-slideshow': [
+      'https://sanjuan.objects.liquidweb.services/photos/91009-61352-dsc_1651.jpg',
+      'https://sanjuan.objects.liquidweb.services/photos/rachel_a.jpg',
+      'https://sanjuan.objects.liquidweb.services/photos/san_juan_excursions_stellar_sealions.jpg',
+    ],
+    'diving-slideshow': [
+      'https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/r/33/02/46/49/caption.jpg',
+      'https://www.scubadiving.com/sites/default/files/styles/655_1x_webp/public/trevor/XY70298-D-brandon_cole_edit_1.jpg.webp?itok=vPApr578',
+      'https://www.scubadiving.com/sites/default/files/styles/655_1x_webp/public/trevor/YN0890-D-brandon_cole_edit_1.jpg.webp?itok=boyQb0EX',
+      'https://www.scubadiving.com/sites/default/files/styles/655_1x_webp/public/trevor/TQ70194-D-brandon_cole_edit.jpg.webp?itok=4NyTiWwK',
+    ],
+  };
+
+
+  const slideIndexes = {};
+
+  for (const [id, images] of Object.entries(slideshows)) {
+    document.getElementById(id).innerHTML = createSlideshow(images);
+    slideIndexes[id] = 0;
+    updateSlides(id);
+  }
+
+  function plusSlides(btn, n) {
+    const container = btn.closest('.slideshow-container').parentElement;
+    slideIndexes[container.id] = (slideIndexes[container.id] + n + getSlides(container.id).length) % getSlides(container.id).length;
+    updateSlides(container.id);
+  }
+
+  function getSlides(id) {
+    return document.querySelectorAll(`#${id} .mySlides`);
+  }
+
+  function updateSlides(id) {
+    getSlides(id).forEach((slide, i) => {
+      slide.style.display = i === slideIndexes[id] ? 'block' : 'none';
+    });
+  }
+</script>
+
 {% endblock %}
