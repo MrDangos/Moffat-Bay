@@ -10,6 +10,7 @@
 - Python 3.x
 - MySQL (LocalHost:3306)
 - pip dependencies: `pip install -r requirements.txt`
+- pip install python-dotenv
 
 This project uses a `.env` file to store sensitive credentials. This file is not included in the repository for security reasons.
 
