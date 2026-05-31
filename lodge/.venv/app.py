@@ -4,14 +4,19 @@ from flask_session import Session
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
+from dotenv import load_dotenv
+import os
 
 
 app = Flask(__name__)
-app.secret_key = 'stundent'
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'root'   
-app.config['MYSQL_DB'] = 'user_table'
+
+load_dotenv()
+
+app.secret_key = os.getenv('SECRET_KEY')
+app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST')
+app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')
+app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
+app.config['MYSQL_DB'] = os.getenv('MYSQL_DB')
 app.config["SESSION_PERMANENT"] = False    # session will not be lost if the browser is closed
 app.config["SESSION_TYPE"] = "filesystem"  # session is store in the filesystem
 
