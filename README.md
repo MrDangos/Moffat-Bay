@@ -11,10 +11,16 @@
 - MySQL (LocalHost:3306)
 - pip dependencies: `pip install -r requirements.txt`
 
+This project uses a `.env` file to store sensitive credentials. This file is not included in the repository for security reasons.
+
+To get started:
+1. Copy `.env.example` and rename it to `.env`
+2. Open `.env` and fill in your MySQL credentials and secret key
+3. Save the file and run the project as normal
 ---
 
 ## Running the Project
-
+   
 The project will run as-is. Run the app with:
 
 ```bash
