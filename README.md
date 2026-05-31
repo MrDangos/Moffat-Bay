@@ -101,17 +101,19 @@ CREATE TABLE IF NOT EXISTS reservations (
 
 - Public access to all lodge pages without requiring an account
 - User registration and login with session management
+- Secure password hashing using bcrypt
+- Password validation requiring at least 8 characters with one uppercase, one lowercase, and one number
 - Lodge reservation booking with room selection, guest count, and date validation
 - Reservation summary page with confirm and edit options
 - Reservation history viewable on the user account page
 - Reservation lookup by reservation ID or email address
+- Book Now button in the navigation bar for quick access to reservations
 
 ---
 
 ## Known Issues
 
-- Passwords are currently stored as plain text. bcrypt hashing is planned for a future update.
-- No reservation button in the navigation bar. Users must navigate to the reservation page manually.
+- No known issues at this time.
 
 ---
 
