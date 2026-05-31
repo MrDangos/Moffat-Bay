@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block title %}My Account{% endblock %}
+{% block content %}
+    <h1>Cancel Reservation</h1>
+    <p>Are you sure you want to cancel reservation #{{ reservation_id }}?</p>
+    <form method="post">
+        <button type="submit">Confirm Cancellation</button>
+        <a href="{{ url_for('user') }}">Go Back</a>
+    </form>
+{% endblock %}

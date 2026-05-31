@@ -1,0 +1,150 @@
+.user-container {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 0 24px;
+}
+
+.user-container h1 {
+    font-size: 1.8rem;
+    color: #1e3a8a;
+    margin-bottom: 6px;
+}
+
+.user-container h2 {
+    font-size: 1.2rem;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 16px;
+    margin-top: 32px;
+}
+
+#searchInput {
+    width: 100%;
+    max-width: 340px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    background: #fff;
+    outline: none;
+    margin-bottom: 20px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#searchInput:focus {
+    border-color: #1e3a8a;
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.table-wrapper {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+thead {
+    background: #1e3a8a;
+    color: white;
+}
+
+thead th {
+    text-align: left;
+    padding: 14px 16px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+}
+
+tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.15s;
+}
+
+tbody tr:hover {
+    background: #f0f6ff;
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+}
+
+tbody td {
+    padding: 13px 16px;
+    vertical-align: middle;
+    color: #333;
+}
+
+.btn-cancel {
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #1e3a8a;
+    border-radius: 5px;
+    background: transparent;
+    color: #1e3a8a;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-cancel:hover {
+    background: #1e3a8a;
+    color: white;
+}
+
+.empty-state {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    text-align: center;
+    color: #555;
+}
+
+.empty-state a {
+    color: #1e3a8a;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.empty-state a:hover {
+    text-decoration: underline;
+}
+
+.logout-link {
+    display: inline-block;
+    margin-top: 28px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #333;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.logout-link:hover {
+    color: #1e3a8a;
+}
+
+@media (max-width: 768px) {
+    .user-container {
+        padding: 0 16px;
+        margin: 30px auto;
+    }
+
+    table {
+        font-size: 0.8rem;
+    }
+
+    thead th, tbody td {
+        padding: 10px 10px;
+    }
+}

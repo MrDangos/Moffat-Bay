@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="c:\bellevue-projects\Cap Stone\lodge\.venv"
+VIRTUAL_ENV="C:\bellevue-projects\Cap Stone\main\Moffat-Bay\lodge\.venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

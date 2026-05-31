@@ -4,7 +4,6 @@ from time import time
 
 from cachelib.base import BaseCache
 
-
 _test_memcached_key = re.compile(r"[^\x00-\x21\xff]{1,250}$").match
 
 
@@ -125,9 +124,7 @@ class MemcachedCache(BaseCache):
             new_mapping[key] = value
 
         timeout = self._normalize_timeout(timeout)
-        failed_keys = self._client.set_multi(
-            new_mapping, timeout
-        )  # type: _t.List[_t.Any]
+        failed_keys = self._client.set_multi(new_mapping, timeout)  # type: _t.List[_t.Any]
         k_normkey = zip(mapping.keys(), new_mapping.keys())  # noqa: B905
         return [k for k, nkey in k_normkey if nkey not in failed_keys]
 
@@ -139,11 +136,13 @@ class MemcachedCache(BaseCache):
 
     def delete_many(self, *keys: str) -> _t.List[_t.Any]:
         new_keys = []
+        normalized_keys = []
         for key in keys:
-            key = self._normalize_key(key)
-            if _test_memcached_key(key):
+            normalized = self._normalize_key(key)
+            if _test_memcached_key(normalized):
                 new_keys.append(key)
-        self._client.delete_multi(new_keys)
+                normalized_keys.append(normalized)
+        self._client.delete_multi(normalized_keys)
         return [k for k in new_keys if not self.has(k)]
 
     def has(self, key: str) -> bool:

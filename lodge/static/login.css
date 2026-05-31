@@ -1,0 +1,65 @@
+
+.form-card {
+    max-width: 420px;
+    margin: 60px auto;
+    padding: 40px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+    margin-bottom: 24px;
+    color: #1e3a8a;
+    text-align: center;
+}
+
+.form-error {
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    background: #fee2e2;
+    color: #991b1b;
+    border-radius: 6px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 16px;
+    font-size: 0.95rem;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #1e3a8a;
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.form-login-prompt {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #555;
+    text-align: center;
+}
+
+.form-login-prompt a {
+    font-weight: 500;
+    color: #1e3a8a;
+    text-decoration: none;
+}
+
+.form-login-prompt a:hover {
+    text-decoration: underline;
+}

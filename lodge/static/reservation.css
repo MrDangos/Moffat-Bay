@@ -1,0 +1,75 @@
+/* shared form card used on reservation, login, signup */
+.form-card {
+    max-width: 520px;
+    margin: 60px auto;
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.form-title {
+    color: #1e3a8a;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.form-subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 28px;
+    font-size: 0.9rem;
+}
+
+.form-error {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+}
+
+.form-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    background: white;
+}
+
+.date-row {
+    display: flex;
+    gap: 16px;
+}
+
+.date-field {
+    flex: 1;
+}
+
+.btn-full {
+    width: 100%;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.form-login-prompt {
+    text-align: center;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.form-login-prompt a {
+    color: #1e3a8a;
+    font-weight: 500;
+}
