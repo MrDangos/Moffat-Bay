@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block title %}
+Contact Page
+{% endblock %}
+{% block content %}
+<section class="content" style="max-width: 800px; margin: 0 auto; padding: 20px;">
+    <h2>Contact Us</h2>
+
+    <p>
+        Our team is here to help with any questions you have about reservations, our marina, outdoor activities, or services provided.
+    </p>
+
+    <h2>Contact</h2>
+
+    <p>
+        <strong>Email:</strong> info@moffatbaylodge.com
+    </p>
+
+    <p>
+        <strong>Address:</strong><br>
+        Moffat Bay Lodge<br>
+        Joviedsa Island<br>
+        San Juan Islands
+    </p>
+
+    <h2>Contact Form</h2>
+
+    <form>
+        <label for="name">Full Name</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="email">Email Address</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="phone">Phone</label><br>
+        <input type="tel" id="phone" name="phone"><br><br>
+
+        <label for="message">Message</label><br>
+        <textarea id="message" name="message" rows="6" required></textarea><br><br>
+
+        <button type="submit">Send</button>
+    </form>
+
+    <h2>Hours of Operation</h2>
+
+    <ul>
+        <li>Monday through Friday: 8:00am to 8:00pm</li>
+        <li>Saturday & Sunday: 9:00am to 6:00pm</li>
+    </ul>
+
+</section>
+
+</body>
+{% endblock %}

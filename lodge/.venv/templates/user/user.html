@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+{% block title %}My Account{% endblock %}
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='user.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <div class="user-container">
+    <h1>Welcome, {{ name }}</h1>
+
+    <h2>Your Reservations</h2>
+    <input type="text" id="searchInput" placeholder="Search reservations...">
+
+    {% if reservations %}
+        <div class="table-wrapper">
+            <table id="reservationsTable">
+            <thead>
+                <tr>
+                    <th>Reservation ID</th>
+                    <th>Room</th>
+                    <th>Guests</th>
+                    <th>Check-in</th>
+                    <th>Check-out</th>
+                    <th>Nights</th>
+                    <th>Total Cost</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="reservationsBody">
+                {% for r in reservations %}
+                <tr>
+                    <td>{{ r.reservationid }}</td>
+                    <td>{{ r.room_name }}</td>
+                    <td>{{ r.num_guests }}</td>
+                    <td>{{ r.checkin }}</td>
+                    <td>{{ r.checkout }}</td>
+                    <td>{{ r.nights }}</td>
+                    <td>${{ r.total_cost }}</td>
+                    <td><button class="btn-cancel" type="button" onclick="location.href='{{ url_for('cancel_reservation', reservation_id=r.reservationid) }}'">Cancel</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="empty-state">
+            <p>You have no reservations yet. <a href="/reservation/">Book one now!</a></p>
+        </div>
+    {% endif %}
+
+    <button class="logout-link" onclick="location.href='{{ url_for('logout') }}'">Logout</button>
+
+    <script>
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        }   
+        $(document).ready(function(){
+            $("#searchInput").on("input", function(){
+                let resId = $(this).val();
+                if (resId === "") {
+                    location.reload();
+                    return;
+                }
+                $.ajax({
+                    url: "/search_reservations",
+                    method: "POST",
+                    data: { reservation_id: resId },
+                    success: function(res){
+                        console.log(res);
+                        let tbody = $("#reservationsBody");
+                        tbody.empty();
+
+                        if (res.length === 0) {
+                            tbody.append('<tr><td colspan="8">No reservations found.</td></tr>');
+                            return;
+                        }
+
+                        res.forEach(function(row){
+                            tbody.append(`
+                                <tr>
+                                    <td>${row.reservationid}</td>
+                                    <td>${row.room_name}</td>
+                                    <td>${row.num_guests}</td>
+                                    <td>${formatDate(row.checkin)}</td>
+                                    <td>${formatDate(row.checkout)}</td>
+                                    <td>${row.nights}</td>
+                                    <td>$${row.total_cost}</td>
+                                    <td><button type="button" onclick="location.href='/cancel_reservation/${row.reservationid}'">Cancel</button></td>
+                                </tr>
+                            `);
+                        })
+                    }
+                });
+            });
+        });
+    </script>
+</div>
+{% endblock %}

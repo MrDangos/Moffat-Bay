@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block title %}Reservation Summary{% endblock %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='summary-page.css') }}">
+
+<div class="summary-card">
+    <h2>Reservation Summary</h2>
+    <p class="subtitle">Please review your details before confirming.</p>
+
+    <div class="summary-table-wrap">
+        <table class="summary-table">
+            <tr>
+                <td class="label">Room</td>
+                <td class="value" style="color: #1e3a8a;">{{ reservation.room_name }}</td>
+            </tr>
+            <tr>
+                <td class="label">Guests</td>
+                <td class="value">{{ reservation.num_guests }}</td>
+            </tr>
+            <tr>
+                <td class="label">Check-in</td>
+                <td class="value">{{ reservation.checkin }}</td>
+            </tr>
+            <tr>
+                <td class="label">Check-out</td>
+                <td class="value">{{ reservation.checkout }}</td>
+            </tr>
+            <tr>
+                <td class="label">Nightly Rate</td>
+                <td class="value">${{ reservation.nightly_rate }}/night</td>
+            </tr>
+            <tr>
+                <td class="label">Nights</td>
+                <td class="value">{{ reservation.nights }}</td>
+            </tr>
+            <tr class="total-row">
+                <td class="label">Total Cost</td>
+                <td class="value total-value">${{ reservation.total_cost }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <form action="/confirm/" method="post">
+        <button type="submit" class="btn" style="width: 100%; text-align: center;">Confirm Reservation</button>
+    </form>
+
+    <div class="summary-actions">
+        <a href="/reservation/edit" class="edit-link">Edit Reservation</a>
+        <a href="/reservation/" class="cancel-link">Cancel</a>
+    </div>
+</div>
+
+{% endblock %}

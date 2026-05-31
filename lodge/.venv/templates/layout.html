@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>{% block title %}{% endblock %}</title>
+            <!-- css sheet -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='moffat-landing-page.css') }}">
+
+            <!-- account Icon -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+            <!-- font (google fonts) -->
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <header>
+            <h1><a href="{{ url_for('home') }}" style="text-decoration: none; color: inherit;">Moffat Bay Lodge</a></h1>
+            <nav>
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+                <a href="{{ url_for('attractions') }}">Attractions</a>
+                
+                {% if session.name %}
+                    <a href="{{ url_for('user') }}" class="fa-solid fa-circle-user"></a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="fa-solid fa-circle-user"></a>
+                {% endif %}
+            </nav>
+        </header>
+
+        <div class="body-content">
+            {% block content %}
+            {% endblock %}
+            <hr/>
+        </div>
+    </body>
+</html>
