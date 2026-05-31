@@ -6,9 +6,11 @@ import MySQLdb.cursors
 import re
 from dotenv import load_dotenv
 import os
+from flask_bcrypt import Bcrypt
 
 
 app = Flask(__name__)
+bcrypt = Bcrypt(app)
 
 load_dotenv()
 
@@ -176,25 +178,20 @@ def edit_reservation():
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     message = ''
-    # Check if "email" and "password" exist
     if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
         email = request.form['email']
         password = request.form['password']
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute(
-            'SELECT * FROM user WHERE email = % s AND password = % s', 
-                  (email, password, ))
+        cursor.execute('SELECT * FROM user WHERE email = %s', (email,))
         user = cursor.fetchone()
-        # If account exists user in logged in and session in save in cookies
-        if user:
+        if user and bcrypt.check_password_hash(user['password'], password):
             session['loggedin'] = True
             session['userid'] = user['userid']
             session['name'] = user['name']
             session['email'] = user['email']
-            message = 'Logged in successfully !'
             return redirect(url_for('user'))
         else:
-            message = 'Please enter correct email / password !'
+            message = 'Please enter correct email / password!'
     return render_template('user/login.html', message=message)
 
 # Logs user out and clear sessoin data/cookies
@@ -210,28 +207,30 @@ def logout():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     message = ''
-    # Check if "name", "password" and "email" exist before creating account
     if request.method == 'POST' and 'name' in request.form and 'password' in request.form and 'email' in request.form:
         userName = request.form['name']
         password = request.form['password']
         email = request.form['email']
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM user WHERE email = % s', (email, ))
+        cursor.execute('SELECT * FROM user WHERE email = %s', (email,))
         account = cursor.fetchone()
         if account:
-            message = 'Account already exists !'
+            message = 'Account already exists!'
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-            message = 'Invalid email address !'
-        elif not userName or not password or not email:
-            message = 'Please fill out the form !'
+            message = 'Invalid email address!'
+        elif not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$', password):
+            message = 'Password must be at least 8 characters and include one uppercase letter, one lowercase letter, and one number.'
+        elif not userName or not email:
+            message = 'Please fill out the form!'
         else:
+            hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
             cursor.execute(
-                'INSERT INTO user VALUES (NULL, % s, % s, % s)', 
-                      (userName, email, password, ))
+                'INSERT INTO user VALUES (NULL, %s, %s, %s)',
+                (userName, email, hashed_password,))
             mysql.connection.commit()
-            message = 'You have successfully registered !'
+            message = 'You have successfully registered!'
     elif request.method == 'POST':
-        message = 'Please fill out the form !'
+        message = 'Please fill out the form!'
     return render_template('user/signup.html', message=message)
 
 # user account page, only displays if user is logged in and display all of users reservations
