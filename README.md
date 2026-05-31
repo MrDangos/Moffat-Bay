@@ -10,20 +10,31 @@
 - Python 3.x
 - MySQL (LocalHost:3306)
 - pip dependencies: `pip install -r requirements.txt`
-- pip install python-dotenv
 
-This project uses a `.env` file to store sensitive credentials. This file is not included in the repository for security reasons.
+---
 
-To get started:
-1. Copy `.env.example` and rename it to `.env`
-2. Open `.env` and fill in your MySQL credentials and secret key
-3. Save the file and run the project as normal
+## Setup
+
+1. Clone the repository
+2. Create and activate a virtual environment:
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+```
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+4. Copy `.env.example` and rename it to `.env`
+5. Open `.env` and fill in your MySQL credentials and secret key
+
+> This project uses a `.env` file to store sensitive credentials. This file is not included in the repository for security reasons.
+
 ---
 
 ## Running the Project
-   
-The project will run as-is. Run the app with:
 
+Run the app with:
 ```bash
 python app.py
 ```
@@ -39,7 +50,7 @@ On first launch, Flask will automatically create the required database schema, t
 | User | root |
 | Password | root |
 
-> If your MySQL settings are different, update lines 11–13 in `lodge/app.py`.
+> If your MySQL credentials are different, update your `.env` file.
 
 ---
 
