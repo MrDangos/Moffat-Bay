@@ -1,50 +1,55 @@
 {% extends "layout.html" %}
-{% block title %}
-Home
-{% endblock %}
+{% block title %}Home{% endblock %}
 {% block content %}
-    <head>
-  <meta charset="UTF-8">
-  <title>MOFFAT BAY LODGE</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
 
-  <!-- main section -->
   <section class="mainintro">
-    <div class="intro-text">
-        <h2>Visit our lodge!</h2>
-        <p>Moffat Bay is a lodge that boasts many attractions and can be an amazing destination.</p>
-        <a href="{{ url_for('attractions') }}" class="btn">Visit Today</a>
-    </div>
-    <img src="placeholderurl.com" alt="Lodge Image">
+      <img src="https://images.unsplash.com/photo-1685604926176-82bfdf65688f?q=80&w=1548&auto=format&fit=crop" alt="Moffat Bay Lodge">
+      <div class="intro-text">
+        <h2>Welcome to Moffat Bay Lodge</h2>
+        <p>Nestled on the scenic shores of Joviedsa Island in the San Juan Islands, Moffat Bay Lodge offers a one-of-a-kind retreat surrounded by old-growth forests, stunning coastal views, and world-class outdoor adventures.</p>
+        <a href="{{ url_for('reservation') }}" class="btn">Book Your Stay</a>
+      </div>
   </section>
 
-  <!-- lodge features/about -->
   <section class="features">
-    <h3>Moffat Bay Features</h3>
+    <h3>Everything You Need</h3>
     <div class="feature-boxes">
+
       <div class="feature">
-        <h4>LODGE</h4>
-        <p>This is sample text.</p>
+        <h4>Comfortable Rooms</h4>
+        <p>Choose from four room styles Double Full, Queen, Double Queen, or King each with breathtaking views of the bay.</p>
+        <a href="{{ url_for('reservation') }}" style="color: #1e3a8a; font-weight: 500; font-size: 0.9rem;">Book a room →</a>
       </div>
+
       <div class="feature">
-        <h4>MARINA</h4>
-        <p>This is sample text.</p>
+        <h4>Island Attractions</h4>
+        <p>From whale watching and kayaking to hiking and scuba diving, the island offers adventures for every type of traveler.</p>
+        <a href="{{ url_for('attractions') }}" style="color: #1e3a8a; font-weight: 500; font-size: 0.9rem;">Explore attractions →</a>
       </div>
+
+      <div class="feature">
+        <h4>About the Lodge</h4>
+        <p>Developed with the approval of the First Nations Development Committee, our lodge honors the land, traditions, and history of the region.</p>
+        <a href="{{ url_for('about') }}" style="color: #1e3a8a; font-weight: 500; font-size: 0.9rem;">Learn more →</a>
+      </div>
+
+      <div class="feature">
+        <h4>Get in Touch</h4>
+        <p>Have questions about your stay or need help planning your trip? Our team is here to help you every step of the way.</p>
+        <a href="{{ url_for('contact') }}" style="color: #1e3a8a; font-weight: 500; font-size: 0.9rem;">Contact us →</a>
+      </div>
+
     </div>
   </section>
 
-  <!-- cta -->
   <section class="cta">
-    <h3>Book Your Visit Today</h3>
-      <a href="{{ url_for('reservation') }}" class="btn">Reserve Now</a>
+    <h3>Ready to experience Moffat Bay?</h3>
+    <p>Join us for an unforgettable stay on Joviedsa Island. Reservations are quick and easy.</p>
+    <a href="{{ url_for('reservation') }}" class="btn">Reserve Now</a>
   </section>
 
-  <!-- footer -->
   <footer>
-    <p>2026 - Moffat Bay Project</p>
+    <p>&copy; 2026 Moffat Bay Lodge — Joviedsa Island, San Juan Islands</p>
   </footer>
 
-</body>
 {% endblock %}

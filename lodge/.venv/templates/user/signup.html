@@ -1,29 +1,30 @@
 {% extends "layout.html" %}
-{% block title %}
-Sign Up Page
-{% endblock %}
+{% block title %}Sign Up{% endblock %}
 {% block content %}
-<div class="container">
-    <h1> Sign Up </h1>
-    <form action="{{ url_for('signup') }}" method="post">
-        {% if message is defined and message %}
-            <div style="color: red;">  <strong>  {{ message }} ???? </strong></div>
-        {% endif %}
-        <br>
-        <label>Name:</label>
-        <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" name="name">
-        
-        <br>
-        <label>Email:</label>
-        <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" name="email">
-        
-        <br>
-        <label class="gf">Password:</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" name="pswd">
 
-        <br>
-        <button type="submit" class="btn btn-primary">Register</button>
-        <p class="bottom">Already have an account?  <a class="bottom" href="{{url_for('login')}}"> Login here</a></p>
+<div class="form-card">
+    <h2 class="form-title">Create an Account</h2>
+
+    {% if message %}
+        <div class="form-error">{{ message }}</div>
+    {% endif %}
+
+    <form action="{{ url_for('signup') }}" method="post">
+        <label class="form-label">Name</label>
+        <input type="text" name="name" placeholder="Enter your name" class="form-input">
+
+        <label class="form-label">Email</label>
+        <input type="email" name="email" placeholder="Enter your email" class="form-input">
+
+        <label class="form-label">Password</label>
+        <input type="password" name="password" placeholder="Enter your password" class="form-input">
+
+        <button type="submit" class="btn btn-full">Create Account</button>
     </form>
-</div>  
+
+    <p class="form-login-prompt" style="margin-top: 20px;">
+        Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+    </p>
+</div>
+
 {% endblock %}
